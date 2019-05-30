@@ -65,3 +65,22 @@ a:active {
     margin-bottom: 3px;
     box-shadow:0 2px 2px rgba(0,0,0,0.5);
 }
+
+
+#spinner{
+    position: fixed;
+    width: 5vw;
+    height: 5vw;
+    left: 47.5vw;
+    top: 47.5vh;
+    background: #a1a2a1;
+    border-radius: 50%;
+    border: .3em solid transparent;
+    animation: glow 1s ease infinite;
+    z-index: 100;
+}
+@keyframes glow {
+    0% {box-shadow:0 0 0 .4em #a1a2a1, 0 0 0 .1em #a1a2a1; transform:rotate(360deg);}
+    50% {border-top-color:#605556;}
+    100% { box-shadow:0 0 0 .4em #a1a2a1, 0 0 0 3.6em transparent;}
+}

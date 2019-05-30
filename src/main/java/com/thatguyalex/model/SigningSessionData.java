@@ -82,9 +82,9 @@ public class SigningSessionData implements Serializable {
 
     public String getFilePath(boolean signed) {
         if (signed) {
-            return "src/test/resources/texts/" + getIsik() + ".bdoc";
+            return "src/test/resources/signed/" + getIsik() + ".txt";
         }
-        return "src/test/resources/signed/" + getIsik() + ".txt";
+        return "src/test/resources/texts/" + getIsik() + ".bdoc";
     }
 
     public String getFileName(boolean signed) {

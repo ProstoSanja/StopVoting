@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>I want this to STOP</title>
     <script src="js/hwcrypto.js"></script>
     <script src="js/hwcrypto-legacy.js"></script>
     <script src="js/hex2base.js"></script>
@@ -10,10 +10,10 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
 </head>
 <body>
-<video loop muted autoplay id="bg_vid" poster="image.png">
-    <!-- Video is embedded in the WEBM format -->
+<video loop muted autoplay id="bg_vid" poster="/bg/bg.jpg">
     <source src="bg/out_full.webm" type="video/webm">
 </video>
+<div id="spinner" style="display: none;"></div>
 <div class="title_holder">
     <p id="title">I want this to STOP</p>
 </div>
@@ -32,22 +32,18 @@
     var queueFunc = null;
 
     function responseHandler(ev1) {
+        spinner(false);
         var response = JSON.parse(ev1.target.response);
-        console.log(response);
         switch (response.action) {
             case "request_signature":
                 endsign(response.payload);
                 break;
             case "error":
-                alert("error: " + response.payload);
+                handleError(response.payload);
                 break;
-            case "auth_success":
+            case "success":
                 handleLogin(response.payload);
                 //enable sign||remove+download button
-                break;
-            case "sign_success":
-                alert("signed for: " + response.payload);
-                //enable remove+download button
                 break;
         }
         if (queueFunc != null) {
@@ -57,9 +53,8 @@
         }
     }
 
-    //this is an auth function, it will return if user has or hasnt signed, so we can choose between states, will do a bit later.
-    //you will get that param from responsehandler auth_success
     function getcertificate(func) {
+        spinner(true);
         queueFunc = func;
         window.hwcrypto.getCertificate({lang: 'en'}).then(function(certificate) {
             window.certificate = certificate;
@@ -68,11 +63,13 @@
             xhr.open("POST", "/auth", true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhr.send("cert=" + window.certificate.hex);
+        }, function(error) {
+            handleError(error.message);
         });
     }
 
-    //when user clicks the sign button
     function startsign() {
+        spinner(true);
         if  (window.certificate === undefined) {
             getcertificate(startsign);
         } else {
@@ -84,18 +81,19 @@
         }
     }
 
-    //called from callbacks, signing second phase
     function endsign(data) {
+        spinner(true);
         window.hwcrypto.sign(window.certificate, {type: 'SHA-256', hex: data}, {lang: 'en'}).then(function(signature) {
             var xhr = new XMLHttpRequest;
             xhr.onload = responseHandler;
             xhr.open("POST", "/sign/finish", true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhr.send("signature="+signature.hex);
+        }, function(error) {
+            handleError(error.message);
         });
     }
 
-    //to download a signed file, should only be visible in signed state
     function loadfile() {
         if  (window.certificate === undefined) {
             getcertificate(loadfile);
@@ -106,6 +104,7 @@
 
 
     function handleLogin(payload) {
+        spinner(false);
         document.getElementById("title").innerHTML = "Welcome, " + payload.name;
         hidebuttons();
         if (payload.voted) {
@@ -119,6 +118,19 @@
         document.getElementById("buttons_auth").style.display = "none";
         document.getElementById("buttons_signed").style.display = "none";
         document.getElementById("buttons_unsigned").style.display = "none";
+    }
+
+    function spinner(state) {
+        if (state) {
+            document.getElementById("spinner").style.display = "";
+        } else {
+            document.getElementById("spinner").style.display = "none";
+        }
+    }
+
+    function handleError(error) {
+        spinner(false);
+        console.log(error);
     }
 
 

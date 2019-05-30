@@ -27,17 +27,9 @@ public class SignatureController {
         try {
             X509Certificate userCert = processCert(cert);
 
-            /*
-            ASN1OctetString akiOc = ASN1OctetString.getInstance(userCert.getExtensionValue("1.3.6.1.5.5.7.1.1"));
-            AuthorityInformationAccess aia = AuthorityInformationAccess.getInstance(akiOc.getOctets());
-            String ocspurl = aia.getAccessDescriptions()[0].getAccessLocation().getName().toString();
-            System.out.println(ocspurl);
-             */
-
             Configuration config = Configuration.getInstance();
             config.setPreferAiaOcsp(true);
             config.setTspSource("http://dd-at.ria.ee/tsa");
-            //config.setOcspSource(ocspurl);
 
             PrintWriter writer = new PrintWriter(session.getFilePath(false), "UTF-8");
             writer.println(session.getName());
@@ -72,7 +64,7 @@ public class SignatureController {
             Signature finalSignature = session.getDataToSign().finalize(DatatypeConverter.parseHexBinary(signature));
             session.getContainer().addSignature(finalSignature);
             session.getContainer().saveAsFile(session.getFilePath(true));
-            return new ProcessData("sign_success", session.getName());
+            return new ProcessData("success", new ProcessData.AuthData(session.getName(), session.doesFileExist()));
         } catch (Exception exception) {
             return new ProcessData("error", "failed_signature");
         }
@@ -96,7 +88,7 @@ public class SignatureController {
     public ProcessData getFile(String cert) {
         try {
             processCert(cert);
-            return new ProcessData("auth_success", new ProcessData.AuthData(session.getName(), session.doesFileExist()));
+            return new ProcessData("success", new ProcessData.AuthData(session.getName(), session.doesFileExist()));
         } catch (Exception exception) {
             exception.printStackTrace();
             return new ProcessData("error", "auth_failed");
