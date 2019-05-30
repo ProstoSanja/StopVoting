@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/hwcrypto.js"></script>
+    <script src="js/hwcrypto-legacy.js"></script>
+    <script src="js/hex2base.js"></script>
+</head>
+<body>
+    <button id="send">Send</button>
+    <script>
+        document.getElementById("send").onclick = (function (ev) {
+            window.hwcrypto.getCertificate({lang: 'en'}).then(function(certificate) {
+
+                window.certificate = certificate;
+                var xhr = new XMLHttpRequest;
+                xhr.onload = responseHandler;
+                xhr.open("POST", "/sign/start", false);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send("name=test&isik=test&cert="+certificate.hex);
+
+            });
+        });
+
+        function responseHandler(ev1) {
+            var response = JSON.parse(ev1.target.response);
+            switch (response.action) {
+                case "requestSignature":
+                    signandresponse(response.payload);
+                    break;
+                case "error":
+                    alert(response.payload);
+                    break;
+                case "success":
+                    alert(response.payload);
+                    break;
+            }
+        }
+
+        function signandresponse(data) {
+            window.hwcrypto.sign(window.certificate, {type: 'SHA-256', hex: data}, {lang: 'en'}).then(function(signature) {
+
+                var xhr = new XMLHttpRequest;
+                xhr.onload = responseHandler;
+                xhr.open("POST", "/sign/finish", false);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send("signature="+signature.hex);
+            });
+        }
+    </script>
+</body>
+</html>
