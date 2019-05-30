@@ -1,4 +1,4 @@
-package com.thatguyalex.model;
+package com.thatguyalex;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

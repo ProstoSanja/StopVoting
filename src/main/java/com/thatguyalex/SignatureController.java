@@ -96,7 +96,7 @@ public class SignatureController {
     public ProcessData getFile(String cert) {
         try {
             processCert(cert);
-            return new ProcessData("auth_success", session.getName());
+            return new ProcessData("auth_success", new ProcessData.AuthData(session.getName(), session.doesFileExist()));
         } catch (Exception exception) {
             exception.printStackTrace();
             return new ProcessData("error", "auth_failed");

@@ -6,19 +6,34 @@
     <script src="js/hwcrypto.js"></script>
     <script src="js/hwcrypto-legacy.js"></script>
     <script src="js/hex2base.js"></script>
+    <link rel="stylesheet" href="css/app.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
 </head>
 <body>
-<button id="send">Send</button>
-<br/>
-<br/>
-<br/>
-<button id="get">get</button>
+<video loop muted autoplay id="bg_vid" poster="image.png">
+    <!-- Video is embedded in the WEBM format -->
+    <source src="bg/out_full.webm" type="video/webm">
+</video>
+<div class="title_holder">
+    <p id="title">I want this to STOP</p>
+</div>
+<div id="buttons_auth" class="button_holder">
+    <a id="auth">Take Action</a>
+</div>
+<div id="buttons_unsigned" class="button_holder" style="display: none;">
+    <a id="sign">I want this to stop</a>
+</div>
+<div id="buttons_signed" class="button_holder" style="display: none;">
+    <a id="remove">Cancel my vote</a>
+    <a id="download">Download signed document</a>
+</div>
 <script>
 
     var queueFunc = null;
 
     function responseHandler(ev1) {
         var response = JSON.parse(ev1.target.response);
+        console.log(response);
         switch (response.action) {
             case "request_signature":
                 endsign(response.payload);
@@ -27,7 +42,7 @@
                 alert("error: " + response.payload);
                 break;
             case "auth_success":
-                alert("logged in: " + response.payload);
+                handleLogin(response.payload);
                 //enable sign||remove+download button
                 break;
             case "sign_success":
@@ -90,8 +105,28 @@
     }
 
 
-    document.getElementById("send").onclick = startsign;
-    document.getElementById("get").onclick = loadfile;
+    function handleLogin(payload) {
+        document.getElementById("title").innerHTML = "Welcome, " + payload.name;
+        hidebuttons();
+        if (payload.voted) {
+            document.getElementById("buttons_signed").style.display = "";
+        } else {
+            document.getElementById("buttons_unsigned").style.display = "";
+        }
+    }
+
+    function hidebuttons() {
+        document.getElementById("buttons_auth").style.display = "none";
+        document.getElementById("buttons_signed").style.display = "none";
+        document.getElementById("buttons_unsigned").style.display = "none";
+    }
+
+
+    document.getElementById("auth").onclick = function(){
+        getcertificate(null);
+    };
+    document.getElementById("sign").onclick = startsign;
+    document.getElementById("download").onclick = loadfile;
 </script>
 </body>
 </html>

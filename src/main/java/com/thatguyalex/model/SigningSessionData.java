@@ -29,6 +29,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.Serializable;
 
 @Component
@@ -91,5 +92,10 @@ public class SigningSessionData implements Serializable {
             return getIsik() + ".bdoc";
         }
         return getIsik() + ".txt";
+    }
+
+    public boolean doesFileExist() {
+        File f = new File(getFilePath(true));
+        return (f.exists() && !f.isDirectory());
     }
 }
