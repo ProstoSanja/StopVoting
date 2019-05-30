@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class SiteController {
 
     @GetMapping("/")
-    public String demo() {
-        return "demo";
+    public String index() {
+        return "index";
     }
 
 }
