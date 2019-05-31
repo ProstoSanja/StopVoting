@@ -19,6 +19,8 @@ import java.security.cert.X509Certificate;
 @RestController
 public class SignatureController {
 
+
+
     @Autowired
     private SigningSessionData session;
 
@@ -94,7 +96,6 @@ public class SignatureController {
             return new ProcessData("error", "auth_failed");
         }
     }
-
 
     private X509Certificate processCert(String cert) throws Exception {
         X509Certificate userCert = (X509Certificate) CertificateFactory.getInstance("X.509").generateCertificate(

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>I want this to STOP</title>
@@ -18,14 +18,21 @@
     <p id="title">I want this to STOP</p>
 </div>
 <div id="buttons_auth" class="button_holder">
-    <a id="auth">Take Action</a>
+    <p id="counter" th:text="'People who have voted: ' + ${votes}"></p>
+    <a class="button" id="auth">Take Action</a>
 </div>
 <div id="buttons_unsigned" class="button_holder" style="display: none;">
-    <a id="sign">I want this to stop</a>
+    <a class="button" id="sign">I want this to stop</a>
 </div>
 <div id="buttons_signed" class="button_holder" style="display: none;">
-    <a id="remove">Cancel my vote</a>
-    <a id="download">Download signed document</a>
+    <a class="button" id="remove">Cancel my vote</a>
+    <a class="button" id="download">Download signed document</a>
+</div>
+<div class="news_holder">
+    <p id="newstitle" th:text="'Uus valitsus astus sisse ' + ${days} + ' päeva tagasi. See juhtus selle aja jooksul:'"></p>
+    <div th:each="item : ${news}"  class="newswrapper">
+        <a class="newsitem" th:text="${item.name}" th:href="${item.url}" target="_blank"></a>
+    </div>
 </div>
 <script>
 
@@ -105,11 +112,12 @@
 
     function handleLogin(payload) {
         spinner(false);
-        document.getElementById("title").innerHTML = "Welcome, " + payload.name;
         hidebuttons();
         if (payload.voted) {
+            document.getElementById("title").innerHTML = "Thank you, " + payload.name;
             document.getElementById("buttons_signed").style.display = "";
         } else {
+            document.getElementById("title").innerHTML = "Welcome, " + payload.name;
             document.getElementById("buttons_unsigned").style.display = "";
         }
     }
