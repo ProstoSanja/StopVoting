@@ -86,8 +86,24 @@ public class SignatureController {
             return ResponseEntity.status(500).build();
         }
     }
+
+    @PostMapping("/delete")
+    public ProcessData delete(String cert) {
+        try {
+            processCert(cert);
+            if ((new File(session.getFilePath(true))).delete()) {
+                return new ProcessData("success", new ProcessData.AuthData(session.getName(), session.doesFileExist()));
+            } else {
+                return new ProcessData("error", "delete_failed");
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return new ProcessData("error", "delete_failed");
+        }
+    }
+
     @PostMapping("/auth")
-    public ProcessData getFile(String cert) {
+    public ProcessData auth(String cert) {
         try {
             processCert(cert);
             return new ProcessData("success", new ProcessData.AuthData(session.getName(), session.doesFileExist()));

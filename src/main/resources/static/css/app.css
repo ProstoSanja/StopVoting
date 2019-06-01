@@ -41,6 +41,7 @@ p {
     margin-top: 7.5vh;
     height: 39.5vh;
     width: 100vw;
+    overflow-y: auto;
 }
 #title {
     font-size: 7.5vh;
@@ -58,6 +59,7 @@ p {
 }
 
 .button {
+    cursor: pointer;
     display: inline-block;
     height: 10vh;
     line-height: 10vh;
@@ -84,12 +86,29 @@ p {
     display: block;
     margin: 15px auto 15px auto;
 }
+.newswrapper:last-child {
+    margin: 15px auto 7.5vh auto;
+}
 
 .newsitem {
     text-decoration: none;
     color: lightgrey;
     border-bottom: 1px solid #eee;
     font-size: 2.5vh;
+}
+
+#langselect {
+    position: fixed;
+    right: 0;
+    top: 0;
+    padding: 10px;
+}
+
+#langselect a {
+    font-size: 2vh;
+    text-decoration: none;
+    color: lightgrey;
+    padding-left: 5px;
 }
 
 

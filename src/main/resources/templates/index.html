@@ -13,29 +13,35 @@
 <video loop muted autoplay id="bg_vid" poster="/bg/bg.jpg">
     <source src="bg/out_full.webm" type="video/webm">
 </video>
+<div id="langselect">
+    <a href="/">EST</a>
+    <a href="/ru">РУС</a>
+    <a href="/en">ENG</a>
+</div>
 <div id="spinner" style="display: none;"></div>
 <div class="title_holder">
-    <p id="title">I want this to STOP</p>
+    <p id="title" th:text="${lang.iwantstop}"></p>
 </div>
 <div id="buttons_auth" class="button_holder">
-    <p id="counter" th:text="'People who have voted: ' + ${votes}"></p>
-    <a class="button" id="auth">Take Action</a>
+    <p id="counter" th:text="${lang.peoplevoted} + ${votes}"></p>
+    <a class="button" id="auth" th:text="${lang.takeaction}"></a>
 </div>
 <div id="buttons_unsigned" class="button_holder" style="display: none;">
-    <a class="button" id="sign">I want this to stop</a>
+    <a class="button" id="sign" th:text="${lang.iwantstop}"></a>
 </div>
 <div id="buttons_signed" class="button_holder" style="display: none;">
-    <a class="button" id="remove">Cancel my vote</a>
-    <a class="button" id="download">Download signed document</a>
+    <a class="button" id="remove" th:text="${lang.cancelvote}"></a>
+    <a class="button" id="download" th:text="${lang.download}"></a>
 </div>
 <div class="news_holder">
-    <p id="newstitle" th:text="'Uus valitsus astus sisse ' + ${days} + ' päeva tagasi. See juhtus selle aja jooksul:'"></p>
+    <p id="newstitle" th:text="${lang.gov1} + ${days} + ${lang.gov2}"></p>
     <div th:each="item : ${news}"  class="newswrapper">
         <a class="newsitem" th:text="${item.name}" th:href="${item.url}" target="_blank"></a>
     </div>
 </div>
-<script>
+<script th:inline="javascript">
 
+    var lang = (/*[[${lang.lang}]]*/ "en");
     var queueFunc = null;
 
     function responseHandler(ev1) {
@@ -63,7 +69,7 @@
     function getcertificate(func) {
         spinner(true);
         queueFunc = func;
-        window.hwcrypto.getCertificate({lang: 'en'}).then(function(certificate) {
+        window.hwcrypto.getCertificate({lang: lang}).then(function(certificate) {
             window.certificate = certificate;
             var xhr = new XMLHttpRequest;
             xhr.onload = responseHandler;
@@ -90,7 +96,7 @@
 
     function endsign(data) {
         spinner(true);
-        window.hwcrypto.sign(window.certificate, {type: 'SHA-256', hex: data}, {lang: 'en'}).then(function(signature) {
+        window.hwcrypto.sign(window.certificate, {type: 'SHA-256', hex: data}, {lang: lang}).then(function(signature) {
             var xhr = new XMLHttpRequest;
             xhr.onload = responseHandler;
             xhr.open("POST", "/sign/finish", true);
@@ -109,15 +115,29 @@
         }
     }
 
+    function cancelsign() {
+        if  (window.certificate === undefined) {
+            getcertificate(cancelsign);
+        } else {
+                if (confirm(/*[[${lang.areyousure}]]*/ '')) {
+                var xhr = new XMLHttpRequest;
+                xhr.onload = responseHandler;
+                xhr.open("POST", "/delete", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send("cert=" + window.certificate.hex);
+            }
+        }
+    }
+
 
     function handleLogin(payload) {
         spinner(false);
         hidebuttons();
         if (payload.voted) {
-            document.getElementById("title").innerHTML = "Thank you, " + payload.name;
+            document.getElementById("title").innerHTML = (/*[[${lang.thankyou}]]*/ '') + payload.name;
             document.getElementById("buttons_signed").style.display = "";
         } else {
-            document.getElementById("title").innerHTML = "Welcome, " + payload.name;
+            document.getElementById("title").innerHTML = (/*[[${lang.welcome}]]*/ '') + payload.name;
             document.getElementById("buttons_unsigned").style.display = "";
         }
     }
@@ -147,6 +167,7 @@
     };
     document.getElementById("sign").onclick = startsign;
     document.getElementById("download").onclick = loadfile;
+    document.getElementById("remove").onclick = cancelsign;
 </script>
 </body>
 </html>

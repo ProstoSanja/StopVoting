@@ -1,5 +1,6 @@
 package com.thatguyalex;
 
+import com.thatguyalex.model.Lang;
 import com.thatguyalex.model.NewsFeed;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
@@ -20,13 +21,30 @@ public class SiteController {
     private int votes = 0;
     private long days = 0;
     private List<NewsFeed.News> news = new ArrayList<>();
+    private Lang lang = new Lang();
 
     @GetMapping("/")
     public String index(Model model) {
+        setmodel(model);
+        model.addAttribute("lang", lang.et);
+        return "index";
+    }
+    @GetMapping("/ru")
+    public String indexru(Model model) {
+        setmodel(model);
+        model.addAttribute("lang", lang.ru);
+        return "index";
+    }
+    @GetMapping("/en")
+    public String indexen(Model model) {
+        setmodel(model);
+        model.addAttribute("lang", lang.en);
+        return "index";
+    }
+    private void setmodel(Model model) {
         model.addAttribute("votes", votes);
         model.addAttribute("days", days);
         model.addAttribute("news", news);
-        return "index";
     }
 
     @Scheduled(fixedRate = 1000*60*5)
