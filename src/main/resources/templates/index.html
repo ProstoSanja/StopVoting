@@ -8,6 +8,13 @@
     <script src="js/hex2base.js"></script>
     <link rel="stylesheet" href="css/app.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+
+    <meta property="og:url"                content="http://internal.ehub.ee" />
+    <meta property="og:type"               content="website" />
+    <meta property="og:title"              th:content="${lang.iwantstop}" />
+    <meta property="og:description"        th:content="${lang.gov1} + ${days} + ${lang.gov2}" />
+    <meta property="og:image"              content="https://internal.ehub.ee/bg/bg.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
 </head>
 <body>
 <video loop muted autoplay id="bg_vid" poster="/bg/bg.jpg">
@@ -24,14 +31,21 @@
 </div>
 <div id="buttons_auth" class="button_holder">
     <p id="counter" th:text="${lang.peoplevoted} + ${votes}"></p>
-    <a class="button" id="auth" th:text="${lang.takeaction}"></a>
+    <a class="button icon" id="auth">
+        <span class="iconicon"></span>
+        <span class="icontext" th:text="${lang.takeaction}"></span>
+    </a>
 </div>
 <div id="buttons_unsigned" class="button_holder" style="display: none;">
     <a class="button" id="sign" th:text="${lang.iwantstop}"></a>
 </div>
 <div id="buttons_signed" class="button_holder" style="display: none;">
-    <a class="button" id="remove" th:text="${lang.cancelvote}"></a>
-    <a class="button" id="download" th:text="${lang.download}"></a>
+    <a class="button small" id="remove" th:text="${lang.cancelvote}"></a>
+    <a class="button small" id="download" th:text="${lang.download}"></a>
+    <br/>
+    <p id="share" th:text="${lang.shareon}"></p>
+    <a class="button small" id="facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Finternal.ehub.ee&quote=%23MaTahanSedaPeatada">Facebook</a>
+    <a class="button small" id="twitter" target="_blank" href="https://twitter.com/intent/tweet?hashtags=MaTahanSedaPeatada&url=https%3A%2F%2Finternal.ehub.ee">Twitter</a>
 </div>
 <div class="news_holder">
     <p id="newstitle" th:text="${lang.gov1} + ${days} + ${lang.gov2}"></p>
@@ -159,6 +173,7 @@
     function handleError(error) {
         spinner(false);
         console.log(error);
+        alert(error);
     }
 
 

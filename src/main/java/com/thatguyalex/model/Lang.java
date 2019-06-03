@@ -22,19 +22,21 @@ public class Lang {
         en.put("peoplevoted", "People who have voted: ");
         en.put("gov1", "New government entered into power ");
         en.put("gov2", " days ago. This happened since:");
+        en.put("shareon", "Share on: ");
 
         et = new HashMap<>();
         et.put("lang", "et");
         et.put("areyousure", "Kas te olete kindel?");
         et.put("thankyou", "Aitäh, ");
         et.put("welcome", "Tere tulemast, ");
-        et.put("iwantstop", "Ma tahan see PEATADA");
+        et.put("iwantstop", "Ma tahan seda PEATADA");
         et.put("takeaction", "Tegutsema");
         et.put("cancelvote", "Tühista minu hääl");
         et.put("download", "Laadi alla dokument");
         et.put("peoplevoted", "Inimesi hääletas: ");
         et.put("gov1", "Uus valitsus astus sisse ");
         et.put("gov2", " päeva tagasi. See juhtus selle aja jooksul:");
+        et.put("shareon", "Jaga teistega: ");
 
 
         ru = new HashMap<>();
@@ -49,5 +51,6 @@ public class Lang {
         ru.put("peoplevoted", "Людей проголосовало: ");
         ru.put("gov1", "Новое правительство вступило в должность ");
         ru.put("gov2", " дней назад. С тех пор произошло следующее:");
+        ru.put("shareon", "Поделиться: ");
     }
 }

@@ -34,7 +34,9 @@ public class SignatureController {
             config.setTspSource("http://dd-at.ria.ee/tsa");
 
             PrintWriter writer = new PrintWriter(session.getFilePath(false), "UTF-8");
-            writer.println(session.getName());
+            writer.println("Mina, " + session.getName() + ", ei ole rahul praeguse valitsusega, ning hääletan selle ümberkorraldamise eest või selle ebavõimalusel erakorraliste riigikogu valimiste eest.");
+            writer.println(session.getName() + ", " + session.getIsik());
+            writer.println("Allkirjastatud digitaalselt");
             writer.close();
 
             session.setContainer(ContainerBuilder
