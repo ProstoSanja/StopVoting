@@ -23,7 +23,7 @@ public class SiteController {
     private List<NewsFeed.News> news = new ArrayList<>();
     private Lang lang = new Lang();
 
-    @GetMapping("/")
+    @GetMapping({"/", "/et"})
     public String index(Model model) {
         setmodel(model);
         model.addAttribute("lang", lang.et);

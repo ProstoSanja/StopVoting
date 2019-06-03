@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/app.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
 
-    <meta property="og:url"                content="http://internal.ehub.ee" />
+    <meta property="og:url"                th:content="'http://internal.ehub.ee/' + ${lang.lang}" />
     <meta property="og:type"               content="website" />
     <meta property="og:title"              th:content="${lang.iwantstop}" />
     <meta property="og:description"        th:content="${lang.gov1} + ${days} + ${lang.gov2}" />
@@ -44,8 +44,8 @@
     <a class="button small" id="download" th:text="${lang.download}"></a>
     <br/>
     <p id="share" th:text="${lang.shareon}"></p>
-    <a class="button small" id="facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Finternal.ehub.ee&quote=%23MaTahanSedaPeatada">Facebook</a>
-    <a class="button small" id="twitter" target="_blank" href="https://twitter.com/intent/tweet?hashtags=MaTahanSedaPeatada&url=https%3A%2F%2Finternal.ehub.ee">Twitter</a>
+    <a class="button small" id="facebook" target="_blank" th:href="'https://www.facebook.com/sharer/sharer.php?quote=%23MaTahanSedaPeatada&u=https%3A%2F%2Finternal.ehub.ee%2F' +  ${lang.lang}">Facebook</a>
+    <a class="button small" id="twitter" target="_blank" th:href="'https://twitter.com/intent/tweet?hashtags=MaTahanSedaPeatada&url=https%3A%2F%2Finternal.ehub.ee%2F' +  ${lang.lang}">Twitter</a>
 </div>
 <div class="news_holder">
     <p id="newstitle" th:text="${lang.gov1} + ${days} + ${lang.gov2}"></p>
