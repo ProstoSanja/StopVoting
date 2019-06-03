@@ -173,7 +173,32 @@
     function handleError(error) {
         spinner(false);
         console.log(error);
-        alert(error);
+        switch (error) {
+            case "no_implementation":
+                alert(/*[[${lang.error_no_implementation}]]*/);
+                break;
+            case "no_certificates":
+                alert(/*[[${lang.error_no_certificates}]]*/);
+                break;
+            case "user_cancel":
+                //do nothing
+                break;
+            case "auth_failed":
+                alert(/*[[${lang.error_auth_failed}]]*/);
+                break;
+            case "failed_creation":
+                alert(/*[[${lang.error_failed_creation}]]*/);
+                break;
+            case "failed_signature":
+                alert(/*[[${lang.error_failed_signature}]]*/);
+                break;
+            case "delete_failed":
+                alert(/*[[${lang.error_delete_failed}]]*/);
+                break;
+            default:
+                alert(/*[[${lang.error_unknown}]]*/ + error);
+                break;
+        }
     }
 
 
